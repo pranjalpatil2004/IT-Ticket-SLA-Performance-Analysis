@@ -58,7 +58,6 @@ An IT support team needs to know how well it is meeting its **SLA (Service Level
 - High priority has the lowest breach rate, which suggests urgent tickets are handled better.
 
 ## Dashboard
-![Dashboard](images/dashboard.png)
 
 The dashboard has KPI cards (Total Tickets, SLA Compliance %), SLA status by priority, tickets by topic, breach by agent, monthly ticket trend, and a priority slicer.
 
