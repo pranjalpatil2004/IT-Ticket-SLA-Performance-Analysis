@@ -1,92 +1,57 @@
-# IT Ticket & SLA Performance Analysis
+# IT Ticket & SLA Analysis
 
-An end-to-end data analysis project on an IT support desk: **MySQL** for cleaning and analysis, **Power BI** for the dashboard.
+This is my data analyst project where I analysed IT support tickets using MySQL and Power BI.
 
-## Business Problem
-An IT support team needs to know how well it is meeting its **SLA (Service Level Agreement)**, which is the promised time limit for resolving a ticket. This project answers:
+## What is this project about?
+An IT support team gets tickets from users. Each ticket has a time limit to be solved, called SLA. I wanted to find out how many tickets were solved on time and where the team is getting delayed.
 
-1. How many tickets came in, and what is the overall SLA compliance?
-2. Which priority level breaches SLA the most?
-3. Which topics bring the most tickets, and where is breach highest?
-4. Which agents have the highest and lowest breach rates?
+## Questions I wanted to answer
+1. How many tickets are there and how many met the SLA?
+2. Which priority (High, Medium, Low) has the most delays?
+3. Which topic has the most tickets?
+4. Which agent is delaying the most and which is the best?
 
 ## Dataset
-- **Source:** [Technical Support Dataset (Kaggle, by Suvradeep)](https://www.kaggle.com/)
-- **Size:** 2,330 tickets, 22 columns
-- **Key columns:** Priority, Topic, Agent Name, Agent Group, Created time, Resolution time, SLA For Resolution, Support Level
-- The CSV is not included in this repo. Download it from Kaggle.
+Source: Technical Support Dataset (Kaggle, by Suvradeep)
+Size: 2,330 tickets, 22 columns
+Key columns: Priority, Topic, Agent Name, Agent Group, Created time, Resolution time, SLA For Resolution, Support Level
+The CSV is not included in this repo. Download it from Kaggle.
 
-## Tools
-- **MySQL:** staging table, data cleaning, analysis queries
-- **Power BI:** DAX measures, dashboard
-- **Excel / Notepad:** checking the raw file
+## Tools I used
+- MySQL for cleaning the data and writing queries
+- Power BI for making the dashboard
 
-## Approach
-1. Loaded the raw CSV into a staging table (`tickets_raw`) with all columns as text, so the import never fails.
-2. Built `tickets_clean`: converted text to `DATETIME`, turned blank values into `NULL`, trimmed text, and dropped latitude/longitude.
-3. Validated the clean table (2,330 rows, no missing created dates).
-4. Wrote simple `COUNT` + `GROUP BY` queries for each business question.
-5. Connected Power BI to `tickets_clean` and built the dashboard.
+## What I did
+1. Loaded the CSV file into MySQL.
+2. Cleaned the data. The dates were stored as text, so I changed them into proper date format. I also made blank values NULL and removed extra spaces.
+3. Checked that all 2330 rows were there.
+4. Wrote simple queries using COUNT and GROUP BY to answer my questions.
+5. Connected Power BI with the clean table and made the dashboard.
 
-## Key Findings
-| Metric | Result |
-|---|---|
-| Total tickets | **2,330** |
-| SLA compliance | **66.39%** (1,547 met, 783 breached) |
+## What I found
+- Total tickets: 2330
+- SLA met: 1547 tickets and SLA missed: 783 tickets, so only **66.39%** tickets were solved on time.
+- Priority wise delay: Medium 35.04%, Low 33.89%, High 30.29%. High priority tickets are handled a bit better.
+- Product setup has the most tickets (630), then Pricing and licensing (525).
+- Training request has the highest delay (42.42%), but it has only 66 tickets.
+- Agent Connor Danielovitch has the highest delay (38.33%) and Heather Urry has the lowest (23.73%).
 
-**By priority (breach %)**
-
-| Priority | Tickets | Breach % |
-|---|---|---|
-| Medium | 722 | 35.04% |
-| Low | 1,192 | 33.89% |
-| High | 416 | 30.29% |
-
-**By topic**
-- **Product setup** has the most tickets (630), followed by **Pricing and licensing** (525). Together they are about half of all tickets.
-- **Training request** has the highest breach rate (42.42%), but only 66 tickets.
-- Among the big topics, **Pricing and licensing** has the highest breach (35.43%).
-
-**By agent**
-- Highest breach: **Connor Danielovitch** (38.33%)
-- Lowest breach: **Heather Urry** (23.73%)
-- A gap of about 15 points between agents suggests a chance to share good practices.
-
-## Insights
-- About **1 in 3 tickets breaches SLA**, so compliance has clear room to improve.
-- Breach is similar across all priorities (30% to 35%), so the issue looks like the **overall process**, not one priority.
-- High priority has the lowest breach rate, which suggests urgent tickets are handled better.
+## My conclusion
+About 1 out of every 3 tickets misses the SLA. The delay is almost the same in all priorities, so the problem is in the overall process and not in one priority. The team can learn from the agent with the lowest delay.
 
 ## Dashboard
 
-The dashboard has KPI cards (Total Tickets, SLA Compliance %), SLA status by priority, tickets by topic, breach by agent, monthly ticket trend, and a priority slicer.
+The dashboard shows total tickets, SLA percentage, priority wise SLA status, tickets by topic, agent wise delay, monthly tickets and a priority filter.
 
-### DAX measures
-```
-Total Tickets = FORMAT(COUNTROWS('it_ticket_sla tickets_clean'), "0")
+## Things to note
+- Some open tickets are already marked as "SLA Violated" in the data because their time limit is over, so they are counted in the missed tickets.
+- I used the SLA status given in the dataset and did not calculate it again.
 
-SLA Compliance % =
-FORMAT(
-    DIVIDE(
-        CALCULATE(COUNTROWS('it_ticket_sla tickets_clean'), 'it_ticket_sla tickets_clean'[sla_resolution] = "Within SLA"),
-        COUNTROWS('it_ticket_sla tickets_clean')
-    ),
-    "0.00%"
-)
-```
+## Files in this repo
+ Sql has all my queries
+ Dashboard has the Power BI file
+ Images has the dashboard screenshot
 
-## Limitations
-- Open and in-progress tickets can already be marked "SLA Violated" if their deadline has passed, so they are counted in the breach numbers.
-- Resolution is measured on the SLA status given in the dataset, not recalculated with working hours.
-
-## Repository Structure
-```
-IT-Ticket-SLA-Analysis/
-├── dashboard/   Power BI file (.pbix)
-├── images/      dashboard screenshot
-├── sql/         IT_Ticket_SLA_Analysis.sql
-└── README.md
-```
-
-## Author
-**Pranjal**, Data Analyst (Fresher) | GitHub: [pranjalpatil2004](https://github.com/pranjalpatil2004)
+## About me
+Pranjal, fresher looking for data analyst roles.
+GitHub: pranjalpatil2004
